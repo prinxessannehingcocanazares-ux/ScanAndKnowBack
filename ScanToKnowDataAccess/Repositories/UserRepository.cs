@@ -142,6 +142,7 @@ namespace ScanToKnowDataAccess.Repositories
                 UserPassword = xUserDto.UserPassword,
                 UserOtp = xUserDto.UserOtp,
                 OtpExpiry = xUserDto.OtpExpiry,
+                Role = "user",
 
             };
 
