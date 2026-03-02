@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ScanAndKnow2.slnx
+/ScanAndKnow2/bin/Debug/net8.0
+/ScanAndKnow2/obj
+/ScanToKnowBusiness/bin/Debug/net8.0
+/ScanToKnowBusiness/obj
+/ScanToKnowDataAccess/bin/Debug/net8.0
+/ScanToKnowDataAccess/obj

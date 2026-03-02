@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="ScanAndKnow2/ScanAndKnow2.csproj" />
+  <Project Path="ScanToKnowBusiness/ScanToKnowBusiness.csproj" />
+  <Project Path="ScanToKnowDataAccess/ScanToKnowDataAccess.csproj" />
+</Solution>
