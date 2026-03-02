@@ -4,8 +4,8 @@ WORKDIR /src
 
 # Copy csproj files first for layer caching
 COPY ["ScanAndKnow2/ScanAndKnow2.csproj", "ScanAndKnow2/"]
-COPY ["ScanAndKnowBusiness/ScanAndKnowBusiness.csproj", "ScanAndKnowBusiness/"]
-COPY ["ScanAndKnowDataAccess/ScanAndKnowDataAccess.csproj", "ScanAndKnowDataAccess/"]
+COPY ["ScanToKnowBusiness/ScanToKnowBusiness.csproj", "ScanToKnowBusiness/"]
+COPY ["ScanToKnowDataAccess/ScanToKnowDataAccess.csproj", "ScanToKnowDataAccess/"]
 
 # Restore packages
 RUN dotnet restore "ScanAndKnow2/ScanAndKnow2.csproj"
