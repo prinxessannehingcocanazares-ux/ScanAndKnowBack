@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="ScanAndKnow2/ScanAndKnow2.csproj" />
   <Project Path="ScanToKnowBusiness/ScanToKnowBusiness.csproj" />
   <Project Path="ScanToKnowDataAccess/ScanToKnowDataAccess.csproj" />
