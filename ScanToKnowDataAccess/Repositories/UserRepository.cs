@@ -49,7 +49,8 @@ namespace ScanToKnowDataAccess.Repositories
             return new UserDto
             {
                 Id = response.Id,
-                FirstName = response.LastName,
+                FirstName = response.FirstName,
+                LastName = response.LastName,
                 Email = response.Email,
                 ContactNumber = response.ContactNumber,
                 Department = response.Department,

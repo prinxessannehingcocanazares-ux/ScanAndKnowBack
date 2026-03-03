@@ -16,34 +16,19 @@ public class UserController : ControllerBase
         _supabaseService = supabaseService;
     }
 
-    [HttpGet("GetUser")]
-    public async Task<ActionResult<List<UserModel>>> GetUser()
-    {
-        var response = await _userService.GetAllAsync();
-        return Ok(response);
-    }
-
-    [HttpGet("GetById")]
-    public async Task<ActionResult<UserModel>> GetById(int id)
-    {
-        var response = await _userService.GetByIdAsync(id);
-        return Ok(response);
-    }
-
     [HttpPost("Login")]
     public async Task<ActionResult<UserDto>> Login(UserDto user)
     {
-        var response = await _userService.LoginUserServiceAsync(user);
-        return Ok(response);
+        try
+        {
+            var response = await _userService.LoginUserServiceAsync(user);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
     }
-
-    //[HttpPost("SignUp")]
-    //public async Task<ActionResult<UserDto>> SignUp(UserDto user)
-    //{
-    //    var response = await _userService.CreateUserAsync(user);
-
-    //    return Ok(response);
-    //}
 
     [HttpPost("SignUp")]
     public async Task<IActionResult> SignUp([FromForm] UserSignUpRequest request)
@@ -82,6 +67,23 @@ public class UserController : ControllerBase
             return BadRequest(new { status = false, message = ex.Message });
         }
     }
+
+    [HttpPost("GetUserById")]
+    public async Task<ActionResult<UserModel>> GetUserById(int id)
+    {
+        var response = await _userService.GetByIdAsync(id);
+        return Ok(response);
+    }
+
+    [HttpGet("GetUser")]
+    public async Task<ActionResult<List<UserModel>>> GetUser()
+    {
+        var response = await _userService.GetAllAsync();
+        return Ok(response);
+    }
+
+  
+  
 
     [HttpPost("UpdateUser")]
     public async Task<ActionResult<UserDto>> UpdateUser(UserDto user)
