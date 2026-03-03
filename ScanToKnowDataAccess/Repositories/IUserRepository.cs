@@ -1,4 +1,4 @@
-﻿using ScanToKnowDataAccess.Models;
+﻿using ScanToKnowDataAccess.Dto;
 
 namespace ScanToKnowDataAccess.Repositories
 {
@@ -12,5 +12,9 @@ namespace ScanToKnowDataAccess.Repositories
         Task<XUserDto> CreateXUserAsync(XUserDto xUserDto);
         Task<UserDto?> UpdateAsync(UserDto user);
         Task<bool> DeleteAsync(int id);
+        Task<List<DepartmentDto>> GetDepartmentsRepoAsync();
+        Task<List<PositionDto>> GetPositionsRepoAsync();
+
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using ScanToKnowDataAccess.Models;
+﻿using ScanToKnowDataAccess.Dto;
 using ScanToKnowDataAccess.Repositories;
 
 namespace ScanToKnowBusiness
@@ -25,6 +25,14 @@ namespace ScanToKnowBusiness
             return _userRepository.GetByIdAsync(id);
         }
 
+        public  Task<List<DepartmentDto>> GetDepartmentsServiceAsync()
+        {
+            return  _userRepository.GetDepartmentsRepoAsync();
+        }
+        public Task<List<PositionDto>> GetPositionsServiceAsync()
+        {
+            return _userRepository.GetPositionsRepoAsync();
+        }
         public async Task<UserDto> CreateUserAsync(UserDto user)
         {
             user.CreatedAt = DateTime.UtcNow;

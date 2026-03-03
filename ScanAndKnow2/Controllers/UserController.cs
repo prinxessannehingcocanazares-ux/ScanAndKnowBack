@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScanToKnowBusiness;
 using ScanToKnowBusiness.Services;
+using ScanToKnowDataAccess.Dto;
 using ScanToKnowDataAccess.Models;
 
 [ApiController]
@@ -75,15 +76,26 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPost("GetDepartments")]
+    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartments()
+    {
+        var departments = await _userService.GetDepartmentsServiceAsync();
+        return Ok(departments);
+    }
+
+    [HttpPost("GetPositions")]
+    public async Task<ActionResult<IEnumerable<PositionDto>>> GetPositions()
+    {
+        var positions = await _userService.GetPositionsServiceAsync();
+        return Ok(positions);
+    }
+
     [HttpGet("GetUser")]
     public async Task<ActionResult<List<UserModel>>> GetUser()
     {
         var response = await _userService.GetAllAsync();
         return Ok(response);
     }
-
-  
-  
 
     [HttpPost("UpdateUser")]
     public async Task<ActionResult<UserDto>> UpdateUser(UserDto user)

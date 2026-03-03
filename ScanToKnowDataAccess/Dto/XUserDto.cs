@@ -1,6 +1,4 @@
-﻿
-
-namespace ScanToKnowDataAccess.Models
+﻿namespace ScanToKnowDataAccess.Dto
 {
     public class XUserDto
     {

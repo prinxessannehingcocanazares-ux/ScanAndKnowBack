@@ -1,4 +1,5 @@
-﻿using ScanToKnowDataAccess.Models;
+﻿using ScanToKnowDataAccess.Dto;
+using ScanToKnowDataAccess.Models;
 using static Supabase.Postgrest.Constants;
 
 namespace ScanToKnowDataAccess.Repositories
@@ -173,6 +174,35 @@ namespace ScanToKnowDataAccess.Repositories
                 OtpExpiry = inserted.OtpExpiry,
                 Status = status
             };
+
+        }
+
+        public async Task<List<DepartmentDto>> GetDepartmentsRepoAsync()
+        {
+            var response = await _supabase
+                .From<DepartmentModel>()
+                .Select("*")
+                .Get();
+
+            return response.Models.Select(u => new DepartmentDto
+            {
+                Id = u.Id,
+                DepartmentName = u.DepartmentName,
+            }).ToList();
+        
+        }
+        public async Task<List<PositionDto>> GetPositionsRepoAsync()
+        {
+            var response = await _supabase
+                .From<PositionModel>()
+                .Select("*")
+                .Get();
+
+            return response.Models.Select(u => new PositionDto
+            {
+                Id = u.Id,
+                Title = u.Title,
+            }).ToList();
 
         }
         public async Task<UserDto?> UpdateAsync(UserDto userDto)
