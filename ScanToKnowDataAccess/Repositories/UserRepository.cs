@@ -22,25 +22,24 @@ namespace ScanToKnowDataAccess.Repositories
 
             return response.Models.Select(u => new UserDto
             {
-                Id = u.Id,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Email = u.Email,
-                ContactNumber = u.ContactNumber,
-                Department = u.Department,
-                Position = u.Position,
-                ProfilePicture = u.ProfilePicture,
-                CreatedAt = u.CreatedAt
+                Id = u.UserId,
+                FirstName = u.UserFirstName,
+                LastName = u.UserLastName,
+                Email = u.UserEmail,
+                ContactNumber = u.UserContactNumber,
+                Department = u.UserDepartment,
+                Position = u.UserPosition,
+                ProfilePicture = u.UserProfilePicture,
             }).ToList();
         }
 
 
-        public async Task<UserDto?> GetByIdAsync(int id)
+        public async Task<UserDto?> GetUserByIdRepoAsync(int id)
         {
             var response = await _supabase
                 .From<UserModel>()
                 .Select("*")
-                .Filter("id", Operator.Equals, id.ToString())
+                .Filter("user_id", Operator.Equals, id.ToString())
                 .Single();
 
 
@@ -49,30 +48,28 @@ namespace ScanToKnowDataAccess.Repositories
 
             return new UserDto
             {
-                Id = response.Id,
-                FirstName = response.FirstName,
-                LastName = response.LastName,
-                Email = response.Email,
-                ContactNumber = response.ContactNumber,
-                Department = response.Department,
-                Position = response.Position,
-                ProfilePicture = response.ProfilePicture,
-                CreatedAt = response.CreatedAt
+                Id = response.UserId,
+                FirstName = response.UserFirstName,
+                LastName = response.UserLastName,
+                Email = response.UserEmail,
+                ContactNumber = response.UserContactNumber,
+                Department = response.UserDepartment,
+                Position = response.UserPosition,
+                ProfilePicture = response.UserProfilePicture,
             };
         }
 
-        public async Task<UserDto> CreateUserAsync(UserDto userDto)
+        public async Task<UserDto> CreateUserRepoAsync(UserDto userDto,string department, string position)
         {
             var userModel = new UserModel
             {
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email,
-                ContactNumber = userDto.ContactNumber,
-                Department = userDto.Department,
-                Position = userDto.Position,
-                ProfilePicture = userDto.ProfilePicture,
-                CreatedAt = DateTime.UtcNow
+                UserFirstName = userDto.FirstName,
+                UserLastName = userDto.LastName,
+                UserEmail = userDto.Email,
+                UserContactNumber = userDto.ContactNumber,
+                UserDepartment = department,
+                UserPosition = position,
+                UserProfilePicture = userDto.ProfilePicture,
             };
 
             var response = await _supabase
@@ -93,15 +90,14 @@ namespace ScanToKnowDataAccess.Repositories
 
             return new UserDto
             {
-                Id = inserted.Id,
-                FirstName = inserted.FirstName,
-                LastName = inserted.LastName,
-                Email = inserted.Email,
-                ContactNumber = inserted.ContactNumber,
-                Department = inserted.Department,
-                Position = inserted.Position,
-                ProfilePicture = inserted.ProfilePicture,
-                CreatedAt = DateTime.UtcNow,
+                Id = inserted.UserId,
+                FirstName = inserted.UserFirstName,
+                LastName = inserted.UserLastName,
+                Email = inserted.UserEmail,
+                ContactNumber = inserted.UserContactNumber,
+                Department = inserted.UserDepartment,
+                Position = inserted.UserPosition,
+                ProfilePicture = inserted.UserProfilePicture,
                 Status = status
 
             };
@@ -114,9 +110,9 @@ namespace ScanToKnowDataAccess.Repositories
             var response = await _supabase
                 .From<XUserModel>()
                 .Select("*")
-                .Filter("user_name", Operator.Equals, user.UserName)
-                .Filter("user_email", Operator.Equals, user.Email)
-                .Filter("user_password", Operator.Equals, user.Password)
+                .Filter("xUser_userName", Operator.Equals, user.UserName)
+                .Filter("xUser_email", Operator.Equals, user.Email)
+                .Filter("xUser_password", Operator.Equals, user.Password)
                 .Single();
             bool status = false;
             if (response == null)
@@ -127,10 +123,10 @@ namespace ScanToKnowDataAccess.Repositories
             { status = true; }
             return new UserDto
             {
-                Id = response.Id,
-                UserName = response.UserName,
-                Email = response.UserEmail,
-                Role = response.Role,
+                Id = response.XUserUserId,
+                UserName = response.XUserUserName,
+                Email = response.XUserUserEmail,
+                Role = response.XUserRole,
                 Status = status
             };
         }
@@ -139,12 +135,15 @@ namespace ScanToKnowDataAccess.Repositories
         {
             var xUserModel = new XUserModel
             {
-                UserName = xUserDto.UserName,
-                UserEmail = xUserDto.UserEmail,
-                UserPassword = xUserDto.UserPassword,
-                UserOtp = xUserDto.UserOtp,
-                OtpExpiry = xUserDto.OtpExpiry,
-                Role = "user",
+                XUserUserId = xUserDto.XUserUserId,
+                XUserUserName = xUserDto.XUserUserName,
+                XUserUserEmail = xUserDto.XUserUserEmail,
+                XUserUserPassword = xUserDto.XUserUserPassword,
+                XUserDepartmentId = xUserDto.XUserDepartmentId,
+                XUserPositionId = xUserDto.XUserPositionId,
+                XUserUserOtp = xUserDto.XUserUserOtp,
+                XUserOtpExpiry = xUserDto.XUserOtpExpiry,
+                XUserRole = xUserDto.XUserRole,
 
             };
 
@@ -166,13 +165,16 @@ namespace ScanToKnowDataAccess.Repositories
 
             return new XUserDto
             {
-                Id = inserted.Id,
-                UserName = inserted.UserName,
-                UserEmail = inserted.UserEmail,
-                UserPassword = inserted.UserPassword,
-                UserOtp = inserted.UserOtp,
-                OtpExpiry = inserted.OtpExpiry,
-                Status = status
+                XUserId = inserted.XUserId,
+                XUserUserName = inserted.XUserUserName,
+                XUserUserEmail = inserted.XUserUserEmail,
+                XUserUserPassword = inserted.XUserUserPassword,
+                XUserDepartmentId = inserted.XUserDepartmentId,
+                XUserPositionId = inserted.XUserPositionId,
+                XUserUserOtp = inserted.XUserUserOtp,
+                XUserOtpExpiry = inserted.XUserOtpExpiry,
+                XUserRole = inserted.XUserRole,
+                XUserStatus = status
             };
 
         }
@@ -186,12 +188,26 @@ namespace ScanToKnowDataAccess.Repositories
 
             return response.Models.Select(u => new DepartmentDto
             {
-                Id = u.Id,
-                DepartmentName = u.DepartmentName,
+                DepartmentId = u.DepartmentId,
+                DepartmentCollegeName = u.DepartmentCollegeName,
             }).ToList();
         
         }
-        public async Task<List<PositionDto>> GetPositionsRepoAsync()
+        public async Task<string> GetDepartmentByIdRepoAsync(string id)
+        {
+            var response = await _supabase
+                .From<DepartmentModel>()
+                .Select("*")
+               .Filter("department_id", Operator.Equals, id.ToString())
+               .Single();
+
+            if (response == null)
+                return null;
+
+            return response.DepartmentCollegeName;
+
+        }
+        public async Task<List<PositionDto>> GetPositionsServiceAsync()
         {
             var response = await _supabase
                 .From<PositionModel>()
@@ -200,10 +216,22 @@ namespace ScanToKnowDataAccess.Repositories
 
             return response.Models.Select(u => new PositionDto
             {
-                Id = u.Id,
-                Title = u.Title,
+                PositionId = u.PositionId,
+                PositionTitle = u.PositionTitle,
             }).ToList();
 
+        }
+        public async Task<string> GetPositionByIdRepoAsync(string id)
+        {
+            var response = await _supabase
+                .From<PositionModel>()
+                .Select("*")
+                .Filter("position_id", Operator.Equals, id.ToString())
+               .Single();
+            if (response == null)
+                return null;
+
+            return response.PositionTitle;
         }
         public async Task<UserDto?> UpdateAsync(UserDto userDto)
         {
@@ -212,15 +240,14 @@ namespace ScanToKnowDataAccess.Repositories
 
             var updateModel = new UserModel
             {
-                Id = userDto.Id,
-                FirstName = userDto.FirstName,
-                LastName = userDto.LastName,
-                Email = userDto.Email,
-                ContactNumber = userDto.ContactNumber,
-                Department = userDto.Department,
-                Position = userDto.Position,
-                ProfilePicture = userDto.ProfilePicture,
-                CreatedAt = userDto.CreatedAt
+                UserId = userDto.Id,
+                UserFirstName = userDto.FirstName,
+                UserLastName = userDto.LastName,
+                UserEmail = userDto.Email,
+                UserContactNumber = userDto.ContactNumber,
+                UserDepartment = userDto.Department,
+                UserPosition = userDto.Position,
+                UserProfilePicture = userDto.ProfilePicture,
 
             };
 
@@ -241,15 +268,14 @@ namespace ScanToKnowDataAccess.Repositories
 
             return new UserDto
             {
-                Id = updated.Id,
-                FirstName = updated.FirstName,
-                LastName = updated.LastName,
-                Email = updated.Email,
-                ContactNumber = updated.ContactNumber,
-                Department = updated.Department,
-                Position = updated.Position,
-                ProfilePicture = updated.ProfilePicture,
-                CreatedAt = updated.CreatedAt,
+                Id = updated.UserId,
+                FirstName = updated.UserFirstName,
+                LastName = updated.UserLastName,
+                Email = updated.UserEmail,
+                ContactNumber = updated.UserContactNumber,
+                Department = updated.UserDepartment,
+                Position = updated.UserPosition,
+                ProfilePicture = updated.UserProfilePicture,
                 Status = status
             };
         }
@@ -257,12 +283,27 @@ namespace ScanToKnowDataAccess.Repositories
         {
             await _supabase
                 .From<UserModel>()
-                .Where(x => x.Id == id)
+                .Where(x => x.UserId == id)
                 .Delete();
 
             return true;
         }
 
+        public async Task<List<RoomDto>> GetRoomsRepoAsync()
+        {
+            var response = await _supabase
+                .From<RoomModel>()
+                .Select("*")
+                .Get();
 
+            return response.Models.Select(u => new RoomDto
+            {
+                RoomId = u.RoomId,
+                RoomCode = u.RoomCode,
+                RoomDepartmentId = u.RoomDepartmentId,
+                RoomCapacity = u.RoomCapacity,
+            }).ToList();
+
+        }
     }
 }

@@ -2,17 +2,19 @@
 {
     public class XUserDto
     {
-        public int? Id { get; set; }
-        public int? UserId { get; set; }
-        public string? UserName { get; set; }
-        public string? UserEmail { get; set; }
+        public int? XUserId { get; set; }
+        public int? XUserUserId { get; set; }
+        public string? XUserUserName { get; set; }
+        public string? XUserUserEmail { get; set; }
 
-        public string? UserPassword { get; set; }
+        public string? XUserUserPassword { get; set; }
+        public string? XUserDepartmentId { get; set; }
+        public string? XUserPositionId { get; set; }
 
-        public string? UserOtp { get; set; }
+        public string? XUserUserOtp { get; set; }
 
-        public DateTime? OtpExpiry { get; set; }
-        public bool Status { get; set; }
-        public string? Role { get; set; }
+        public DateTime? XUserOtpExpiry { get; set; }
+        public bool XUserStatus { get; set; }
+        public string? XUserRole { get; set; }
     }
 }

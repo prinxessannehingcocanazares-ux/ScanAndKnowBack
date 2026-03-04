@@ -6,10 +6,10 @@ namespace ScanToKnowDataAccess.Models
     [Table("positions")]
     public class PositionModel : BaseModel
     {
-        [PrimaryKey("id")]
-        public int Id { get; set; }
+        [PrimaryKey("position_id")]
+        public int PositionId { get; set; }
 
-        [Column("title")]
-        public string? Title { get; set; }
+        [Column("position_title")]
+        public string? PositionTitle { get; set; }
     }
 }

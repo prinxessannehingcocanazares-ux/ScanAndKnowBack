@@ -20,9 +20,9 @@ namespace ScanToKnowBusiness
         }
 
 
-        public Task<UserDto> GetByIdAsync(int id)
+        public Task<UserDto> GetUserByIdServiceAsync(int id)
         {
-            return _userRepository.GetByIdAsync(id);
+            return _userRepository.GetUserByIdRepoAsync(id);
         }
 
         public  Task<List<DepartmentDto>> GetDepartmentsServiceAsync()
@@ -31,42 +31,45 @@ namespace ScanToKnowBusiness
         }
         public Task<List<PositionDto>> GetPositionsServiceAsync()
         {
-            return _userRepository.GetPositionsRepoAsync();
+            return _userRepository.GetPositionsServiceAsync();
         }
-        public async Task<UserDto> CreateUserAsync(UserDto user)
+        public async Task<UserDto> CreateUserServiceAsync(UserDto userReq)
         {
-            user.CreatedAt = DateTime.UtcNow;
-            var response = await _userRepository.CreateUserAsync(user);
+            var department = await _userRepository.GetDepartmentByIdRepoAsync(userReq.Department);
+            var position = await _userRepository.GetPositionByIdRepoAsync(userReq.Position);
+            userReq.CreatedAt = DateTime.UtcNow;
+
+            var createResponse = await _userRepository.CreateUserRepoAsync(userReq, department,position);
 
             bool xUserStatus = false;
             var xUserCreated = new XUserDto();
-            if (response.Status)
+            if (createResponse.Status)
             {
                 var xUserData = new XUserDto
                 {
-                    UserId = response.Id,
-                    UserName = user.UserName,
-                    UserEmail = user.Email,
-                    UserPassword = user.Password,
-                    UserOtp = user.Otp,
-                    OtpExpiry = DateTime.UtcNow,
-                    Role = "user"
+                    XUserUserId = createResponse.Id,
+                    XUserUserName = userReq.UserName,
+                    XUserUserEmail = createResponse.Email,
+                    XUserUserPassword = userReq.Password,
+                    XUserDepartmentId = createResponse.Department,
+                    XUserPositionId = createResponse.Position,
+                    XUserRole = "user"
 
                 };
                 xUserCreated = await _userRepository.CreateXUserAsync(xUserData);
-                if (xUserCreated.Status)
+                if (xUserCreated.XUserStatus)
                 {
                     xUserStatus = true;
                 }
+
             }
 
             if (xUserStatus)
             {
-                response.UserName = xUserCreated.UserName;
-                response.Password = xUserCreated.UserPassword;
-                response.Otp = xUserCreated.UserOtp;
-                response.Status = xUserStatus;
-                return response;
+                createResponse.UserName = xUserCreated.XUserUserName;
+                createResponse.Password = xUserCreated.XUserUserPassword;
+                createResponse.Status = xUserStatus;
+                return createResponse;
             }
             else
             {
@@ -89,6 +92,11 @@ namespace ScanToKnowBusiness
         {
 
             return _userRepository.DeleteAsync(id);
+        }
+
+        public Task<List<RoomDto>> GetRoomsServiceAsync()
+        {
+            return _userRepository.GetRoomsRepoAsync();
         }
     }
 }

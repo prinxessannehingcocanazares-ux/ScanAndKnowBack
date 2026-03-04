@@ -3,13 +3,13 @@ using Supabase.Postgrest.Models;
 
 namespace ScanToKnowDataAccess.Models
 {
-    [Table("department")]
+    [Table("departments")]
     public class DepartmentModel : BaseModel
     {
-        [PrimaryKey("id")]
-        public int Id { get; set; }
+        [PrimaryKey("department_id")]
+        public int DepartmentId { get; set; }
 
-        [Column("college_name")]
-        public string? DepartmentName { get; set; }
+        [Column("department_college_name")]
+        public string? DepartmentCollegeName { get; set; }
     }
 }

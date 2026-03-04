@@ -3,29 +3,34 @@ using Supabase.Postgrest.Models;
 
 namespace ScanToKnowDataAccess.Models
 {
-    [Table("x_user")]
+    [Table("xUsers")]
     public class XUserModel : BaseModel
     {
-        [PrimaryKey("id")]
-        public int Id { get; set; }
-        [Column("user_id")]
-        public int? UserId { get; set; }
-        [Column("user_name")]
-        public string? UserName { get; set; }
-        [Column("user_email")]
-        public string? UserEmail { get; set; }
+        [PrimaryKey("xUser_id")]
+        public int XUserId { get; set; }
+        [Column("xUser_user_id")]
+        public int? XUserUserId { get; set; }
+        [Column("xUser_userName")]
+        public string? XUserUserName { get; set; }
+        [Column("xUser_email")]
+        public string? XUserUserEmail { get; set; }
 
-        [Column("user_password")]
-        public string? UserPassword { get; set; }
+        [Column("xUser_password")]
+        public string? XUserUserPassword { get; set; }
 
-        [Column("user_otp")]
-        public string? UserOtp { get; set; }
+        [Column("xUser_department_id")]
+        public string? XUserDepartmentId { get; set; }
+        [Column("xUser_position_id")]
+        public string? XUserPositionId { get;set; }
 
-        [Column("user_role")]
-        public string? Role { get; set; }
+        [Column("xUser_otp")]
+        public string? XUserUserOtp { get; set; }
 
-        [Column("otp_expiry")]
-        public DateTime? OtpExpiry { get; set; }
+        [Column("xUser_role")]
+        public string? XUserRole { get; set; }
+
+        [Column("xUser_otp_expiry")]
+        public DateTime? XUserOtpExpiry { get; set; }
 
 
     }

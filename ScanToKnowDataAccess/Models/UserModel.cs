@@ -6,30 +6,30 @@ namespace ScanToKnowDataAccess.Models
     [Table("users")]
     public class UserModel : BaseModel
     {
-        [PrimaryKey("id")]
-        public int Id { get; set; }
+        [PrimaryKey("user_id")]
+        public int? UserId { get; set; }
 
-        [Column("first_name")]
-        public string? FirstName { get; set; }
-        [Column("last_name")]
-        public string? LastName { get; set; }
+        [Column("user_first_name")]
+        public string? UserFirstName { get; set; }
+        [Column("user_last_name")]
+        public string? UserLastName { get; set; }
 
-        [Column("email")]
-        public string? Email { get; set; }
+        [Column("user_email")]
+        public string? UserEmail { get; set; }
 
-        [Column("contact_number")]
-        public string? ContactNumber { get; set; }
+        [Column("user_contact_number")]
+        public string? UserContactNumber { get; set; }
 
-        [Column("department")]
-        public string? Department { get; set; }
+        [Column("user_department")]
+        public string? UserDepartment { get; set; }
 
-        [Column("position")]
-        public string? Position { get; set; }
+        [Column("user_position")]
+        public string? UserPosition { get; set; }
 
-        [Column("profile_picture")]
-        public string? ProfilePicture { get; set; }
+        [Column("user_profile_picture")]
+        public string? UserProfilePicture { get; set; }
 
-        [Column("created_at")]
-        public DateTime? CreatedAt { get; set; }
+        [Column("user_created_at")]
+        public DateTime? UserCreatedAt { get; set; }
     }
 }

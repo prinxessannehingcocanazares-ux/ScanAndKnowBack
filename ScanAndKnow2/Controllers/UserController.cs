@@ -59,7 +59,7 @@ public class UserController : ControllerBase
                 CreatedAt = DateTime.UtcNow
             };
 
-            var response = await _userService.CreateUserAsync(user);
+            var response = await _userService.CreateUserServiceAsync(user);
 
             return Ok(response);
         }
@@ -72,21 +72,34 @@ public class UserController : ControllerBase
     [HttpPost("GetUserById")]
     public async Task<ActionResult<UserModel>> GetUserById(int id)
     {
-        var response = await _userService.GetByIdAsync(id);
+        var response = await _userService.GetUserByIdServiceAsync(id);
         return Ok(response);
     }
 
     [HttpPost("GetDepartments")]
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartments()
     {
-        var departments = await _userService.GetDepartmentsServiceAsync();
-        return Ok(departments);
+        try
+        {
+            var departments = await _userService.GetDepartmentsServiceAsync();
+            return Ok(departments);
+        }catch(Exception ex)
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
     [HttpPost("GetPositions")]
     public async Task<ActionResult<IEnumerable<PositionDto>>> GetPositions()
     {
         var positions = await _userService.GetPositionsServiceAsync();
+        return Ok(positions);
+    }
+
+    [HttpPost("GetRooms")]
+    public async Task<ActionResult<IEnumerable<RoomDto>>> GetRooms()
+    {
+        var positions = await _userService.GetRoomsServiceAsync();
         return Ok(positions);
     }
 

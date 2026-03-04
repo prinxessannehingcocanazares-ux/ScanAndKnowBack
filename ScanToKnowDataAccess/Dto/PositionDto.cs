@@ -8,7 +8,7 @@ namespace ScanToKnowDataAccess.Dto
 {
     public class PositionDto
     {
-        public int Id { get; set; }
-        public string? Title { get; set; }
+        public int PositionId { get; set; }
+        public string? PositionTitle { get; set; }
     }
 }
