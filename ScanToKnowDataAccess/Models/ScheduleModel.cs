@@ -12,14 +12,14 @@ namespace ScanToKnowDataAccess.Models
         [Column("schedule_subject")]
         public string? ScheduleSubject { get; set; }
         
-        [Column("schedule_day_of_week")]
-        public string? ScheduleDay { get; set; }
+        [Column("schedule_day")]
+        public DateOnly? ScheduleDay { get; set; }
 
         [Column("schedule_start_time")]
-        public TimeSpan ScheduleStartTime { get; set; }
+        public DateTime ScheduleStartTime { get; set; }
        
         [Column("schedule_end_time")]
-        public TimeSpan ScheduleEndTime { get; set; }
+        public DateTime ScheduleEndTime { get; set; }
        
         [Column("schedule_repeat_weekly")]
         public bool? ScheduleRepeatWeekly { get; set; }

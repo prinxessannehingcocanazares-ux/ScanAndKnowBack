@@ -106,5 +106,49 @@ namespace ScanToKnowBusiness
         {
             return _userRepository.GetSchedulesByUserIdRepoAsync(userId);
         }
+
+        public async Task<List<AvailableRoomResponseDto>> GetAvailableRoomsServiceAsync(AvailableRoomDto availableRoomRequest)
+        {
+            // 1. Get all schedules
+            var schedules = await _userRepository.GetAllSchedulesRepoAsync();
+
+            // 2. Filter schedules that conflict with requested time
+            var conflictingSchedules = schedules.Where(s =>
+                s.ScheduleRoomId.HasValue &&
+                s.ScheduleStartTime < availableRoomRequest.End &&
+                s.ScheduleEndTime > availableRoomRequest.Start
+            ).ToList();
+
+            // 3. Get all rooms and departments
+            var allRooms = await _userRepository.GetRoomsRepoAsync();
+            var allDepartments = await _userRepository.GetDepartmentsRepoAsync();
+
+            // 4. Filter free rooms
+            var freeRooms = allRooms
+                .Where(r => !conflictingSchedules.Any(s => s.ScheduleRoomId == r.RoomId))
+                .ToList();
+
+            // 5. get departmentcollegename and set to AvailableRoomResponseDto.departmentCollegename where freeroom.roomdepartmentid == alldepartment.departmentid 
+            var availableRooms = freeRooms.Select(r =>
+            {
+                var department = allDepartments.FirstOrDefault(d => d.DepartmentId == r.RoomDepartmentId);
+
+                return new AvailableRoomResponseDto
+                {
+                    RoomId = r.RoomId,
+                    RoomCode = r.RoomCode,
+                    RoomDepartmentId = r.RoomDepartmentId,
+                    DepartmentCollegeName = department?.DepartmentCollegeName ?? "Unknown",
+                    RoomCapacity = r.RoomCapacity,
+                };
+            }).ToList();
+
+            return availableRooms;
+        }
+
+        public async Task<ScheduleUpdateResponse> UpdateScheduleServiceAsync(ScheduleUpdateRequest updateRequest)
+        {
+            return await _userRepository.UpdateScheduleRepoAsync(updateRequest);
+        }
     }
 }

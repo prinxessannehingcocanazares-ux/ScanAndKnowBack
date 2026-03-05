@@ -59,7 +59,7 @@ namespace ScanToKnowDataAccess.Repositories
             };
         }
 
-        public async Task<UserDto> CreateUserRepoAsync(UserDto userDto,string department, string position)
+        public async Task<UserDto> CreateUserRepoAsync(UserDto userDto, string department, string position)
         {
             var userModel = new UserModel
             {
@@ -191,7 +191,7 @@ namespace ScanToKnowDataAccess.Repositories
                 DepartmentId = u.DepartmentId,
                 DepartmentCollegeName = u.DepartmentCollegeName,
             }).ToList();
-        
+
         }
         public async Task<string> GetDepartmentByIdRepoAsync(string id)
         {
@@ -311,8 +311,8 @@ namespace ScanToKnowDataAccess.Repositories
             {
                 ScheduleSubject = schedule.ScheduleSubject,
                 ScheduleDay = schedule.ScheduleDay,
-                ScheduleStartTime = schedule.ScheduleStartTime,
-                ScheduleEndTime = schedule.ScheduleEndTime,
+                ScheduleStartTime = schedule.ScheduleStartTime.AddHours(8),
+                ScheduleEndTime = schedule.ScheduleEndTime.AddHours(8),
                 ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
                 ScheduleUserId = schedule.ScheduleUserId,
             };
@@ -369,5 +369,40 @@ namespace ScanToKnowDataAccess.Repositories
             }).ToList();
         }
 
+        public async Task<List<ScheduleDto>> GetAllSchedulesRepoAsync()
+        {
+            var response = await _supabase
+                .From<ScheduleModel>()
+                .Select("*")
+                .Get();
+
+            return response.Models.Select(u => new ScheduleDto
+            {
+                ScheduleId = u.ScheduleId,
+                ScheduleSubject = u.ScheduleSubject,
+                ScheduleDay = u.ScheduleDay,
+                ScheduleStartTime = u.ScheduleStartTime,
+                ScheduleEndTime = u.ScheduleEndTime,
+                ScheduleRepeatWeekly = u.ScheduleRepeatWeekly,
+                ScheduleRoomId = u.ScheduleRoomId,
+                ScheduleUserId = u.ScheduleUserId,
+            }).ToList();
+        }
+
+        public async Task<ScheduleUpdateResponse> UpdateScheduleRepoAsync(ScheduleUpdateRequest updateRequest)
+        {
+            var response = await _supabase
+                .From<ScheduleModel>()
+                .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId.ToString())
+                .Set(x => x.ScheduleRoomId, updateRequest.RoomId)
+                .Update();
+
+            var updated = response.Models.FirstOrDefault();
+
+            return new ScheduleUpdateResponse
+            {
+                ScheduleUpdated = updated != null
+            };
+        }
     }
 }

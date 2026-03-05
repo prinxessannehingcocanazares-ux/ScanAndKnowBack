@@ -153,4 +153,34 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpPost("GetAvailableRooms")]
+    public async Task<ActionResult<List<AvailableRoomResponseDto>>> GetAvailableRooms(AvailableRoomDto availableRoomRequest)
+    {
+        try
+        {
+            var availableRooms = await _userService.GetAvailableRoomsServiceAsync(availableRoomRequest);
+            // Filter rooms based on schedule availability logic here
+            // This is a placeholder and should be replaced with actual logic to check room availability
+            return Ok(availableRooms);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("UpdateScheduleById")]
+    public async Task<ActionResult<ScheduleUpdateResponse>> UpdateScheduleById(ScheduleUpdateRequest scheduleRequest)
+    {
+        try
+        {
+            var updateScheduleResponse = await _userService.UpdateScheduleServiceAsync(scheduleRequest);
+            return Ok(updateScheduleResponse);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
 }

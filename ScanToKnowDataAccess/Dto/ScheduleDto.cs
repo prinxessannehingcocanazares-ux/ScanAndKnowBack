@@ -6,11 +6,11 @@
 
         public string? ScheduleSubject { get; set; }
 
-        public string? ScheduleDay { get; set; }
+        public DateOnly? ScheduleDay { get; set; }
 
-        public TimeSpan ScheduleStartTime { get; set; }
+        public DateTime ScheduleStartTime { get; set; }
 
-        public TimeSpan ScheduleEndTime { get; set; }
+        public DateTime ScheduleEndTime { get; set; }
 
         public bool? ScheduleRepeatWeekly { get; set; }
 

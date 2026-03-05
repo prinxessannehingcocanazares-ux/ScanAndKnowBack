@@ -15,7 +15,8 @@ namespace ScanToKnowBusiness
         Task<List<RoomDto>> GetRoomsServiceAsync();
         Task<ScheduleDto> CreateScheduleServiceAsync(ScheduleDto schedule);
         Task<List<ScheduleDto>> GetSchedulesByUserIdServiceAsync(int userId);
-
+        Task<List<AvailableRoomResponseDto>> GetAvailableRoomsServiceAsync(AvailableRoomDto availableRoomRequest);
+        Task<ScheduleUpdateResponse> UpdateScheduleServiceAsync(ScheduleUpdateRequest updateRequest);
 
     }
 }
