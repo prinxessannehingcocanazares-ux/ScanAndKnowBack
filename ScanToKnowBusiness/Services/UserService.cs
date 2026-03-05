@@ -150,5 +150,16 @@ namespace ScanToKnowBusiness
         {
             return await _userRepository.UpdateScheduleRepoAsync(updateRequest);
         }
+
+        public async Task<RoomDto> GetRoomByIdServiceAsync(int id)
+        {
+
+            return await _userRepository.GetRoomByIdRepoAsync(id);
+        }
+        public async Task<DepartmentDto> GetDepartmentByIdServiceAsync(int id)
+        {
+            return await _userRepository.GetDepartmentByIdRepoAsync(id);
+        }
+
     }
 }

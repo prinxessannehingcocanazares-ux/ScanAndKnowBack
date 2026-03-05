@@ -404,5 +404,54 @@ namespace ScanToKnowDataAccess.Repositories
                 ScheduleUpdated = updated != null
             };
         }
+
+        public Task<RoomDto> GetRoomByIdRepoAsync(int id)
+        {
+            var response = _supabase
+                .From<RoomModel>()
+                .Select("*")
+                .Filter("room_id", Operator.Equals, id.ToString())
+                .Single()
+                .ContinueWith(task =>
+                {
+                    var response = task.Result;
+                    if (response == null)
+                        return null;
+                    var room = response;
+                    return new RoomDto
+                    {
+                        RoomId = room.RoomId,
+                        RoomCode = room.RoomCode,
+                        RoomDepartmentId = room.RoomDepartmentId,
+                        RoomCapacity = room.RoomCapacity,
+                    };
+                });
+
+            return response;
+        }
+
+        public Task<DepartmentDto> GetDepartmentByIdRepoAsync(int id)
+        {
+            var response = _supabase
+                .From<DepartmentModel>()
+                .Select("*")
+                .Filter("department_id", Operator.Equals, id.ToString())
+                .Single()
+                .ContinueWith(task =>
+                {
+                    var response = task.Result;
+                    if (response == null)
+                        return null;
+                    var department = response;
+                    return new DepartmentDto
+                    {
+                        DepartmentId = department.DepartmentId,
+                        DepartmentCollegeName = department.DepartmentCollegeName,
+                    };
+                });
+
+            return response;
+        }
+
     }
 }

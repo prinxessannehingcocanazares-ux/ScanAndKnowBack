@@ -103,6 +103,34 @@ public class UserController : ControllerBase
         return Ok(positions);
     }
 
+    [HttpPost("GetRoomById")]
+    public async Task<ActionResult<RoomDto>> GetRoomById(int id)
+    {
+        try
+        {
+            var positions = await _userService.GetRoomByIdServiceAsync(id);
+            return Ok(positions);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("GetDepartmentById")]
+    public async Task<ActionResult<DepartmentDto>> GetDepartmentById(int id)
+    {
+        try
+        {
+            var positions = await _userService.GetDepartmentByIdServiceAsync(id);
+            return Ok(positions);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
     [HttpGet("GetUser")]
     public async Task<ActionResult<List<UserModel>>> GetUser()
     {
@@ -159,8 +187,6 @@ public class UserController : ControllerBase
         try
         {
             var availableRooms = await _userService.GetAvailableRoomsServiceAsync(availableRoomRequest);
-            // Filter rooms based on schedule availability logic here
-            // This is a placeholder and should be replaced with actual logic to check room availability
             return Ok(availableRooms);
         }
         catch (Exception ex)
