@@ -1,9 +1,10 @@
 ﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 
 namespace ScanToKnowDataAccess.Models
 {
-    [Table("positions")]
-    public class ScheduleModel
+    [Table("schedules")]
+    public class ScheduleModel:BaseModel
     {
         [PrimaryKey("schedule_id")]
         public int? ScheduleId { get; set; }
@@ -15,10 +16,10 @@ namespace ScanToKnowDataAccess.Models
         public string? ScheduleDay { get; set; }
 
         [Column("schedule_start_time")]
-        public DateTime ScheduleStartTime { get; set; }
+        public TimeSpan ScheduleStartTime { get; set; }
        
         [Column("schedule_end_time")]
-        public DateTime ScheduleEndTime { get; set; }
+        public TimeSpan ScheduleEndTime { get; set; }
        
         [Column("schedule_repeat_weekly")]
         public bool? ScheduleRepeatWeekly { get; set; }

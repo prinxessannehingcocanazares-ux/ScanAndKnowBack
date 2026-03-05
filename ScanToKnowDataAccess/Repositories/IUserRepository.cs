@@ -17,6 +17,9 @@ namespace ScanToKnowDataAccess.Repositories
         Task<List<PositionDto>> GetPositionsServiceAsync();
         Task<string> GetPositionByIdRepoAsync(string id);
         Task<List<RoomDto>> GetRoomsRepoAsync();
+        Task<ScheduleDto> CreateScheduleRepoAsync(ScheduleDto schedule);
+        Task<List<ScheduleDto>> GetSchedulesByUserIdRepoAsync(int userId);
+
 
 
     }

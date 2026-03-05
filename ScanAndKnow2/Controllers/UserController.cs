@@ -125,4 +125,32 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPost("CreateSchedule")]
+    public async Task<ActionResult<ScheduleDto>> CreateSchedule(ScheduleDto schedule)
+    {
+        try
+        {
+            var createSchedulResponse = await _userService.CreateScheduleServiceAsync(schedule);
+            return Ok(createSchedulResponse);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("GetSchedulesByUserId")]
+    public async Task<ActionResult<List<ScheduleDto>>> GetSchedulesByUserId(int id)
+    {
+        try
+        {
+            var schedules = await _userService.GetSchedulesByUserIdServiceAsync(id);
+            return Ok(schedules);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
 }

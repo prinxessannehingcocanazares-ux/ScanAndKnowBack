@@ -98,5 +98,13 @@ namespace ScanToKnowBusiness
         {
             return _userRepository.GetRoomsRepoAsync();
         }
+        public Task<ScheduleDto> CreateScheduleServiceAsync(ScheduleDto schedule)
+        {
+            return _userRepository.CreateScheduleRepoAsync(schedule);
+        }
+        public Task<List<ScheduleDto>> GetSchedulesByUserIdServiceAsync(int userId)
+        {
+            return _userRepository.GetSchedulesByUserIdRepoAsync(userId);
+        }
     }
 }

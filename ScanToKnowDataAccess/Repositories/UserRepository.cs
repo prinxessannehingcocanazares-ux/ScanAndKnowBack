@@ -305,5 +305,69 @@ namespace ScanToKnowDataAccess.Repositories
             }).ToList();
 
         }
+        public async Task<ScheduleDto> CreateScheduleRepoAsync(ScheduleDto schedule)
+        {
+            var scheduleModel = new ScheduleModel
+            {
+                ScheduleSubject = schedule.ScheduleSubject,
+                ScheduleDay = schedule.ScheduleDay,
+                ScheduleStartTime = schedule.ScheduleStartTime,
+                ScheduleEndTime = schedule.ScheduleEndTime,
+                ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
+                ScheduleUserId = schedule.ScheduleUserId,
+            };
+
+            var response = await _supabase
+                .From<ScheduleModel>()
+                .Insert(new List<ScheduleModel> { scheduleModel });
+
+            var inserted = response.Models.First();
+
+            bool status = false;
+            if (inserted == null)
+            {
+                return null;
+            }
+            else
+            {
+                status = true;
+            }
+
+            return new ScheduleDto
+            {
+                ScheduleId = inserted.ScheduleId,
+                ScheduleSubject = inserted.ScheduleSubject,
+                ScheduleDay = inserted.ScheduleDay,
+                ScheduleStartTime = inserted.ScheduleStartTime,
+                ScheduleEndTime = inserted.ScheduleEndTime,
+                ScheduleRepeatWeekly = inserted.ScheduleRepeatWeekly,
+                ScheduleRoomId = inserted.ScheduleRoomId,
+                ScheduleUserId = inserted.ScheduleUserId,
+                ScheduleStatus = status
+
+            };
+
+        }
+
+        public async Task<List<ScheduleDto>> GetSchedulesByUserIdRepoAsync(int userId)
+        {
+            var response = await _supabase
+                .From<ScheduleModel>()
+                .Select("*")
+                .Filter("schedule_user_id", Operator.Equals, userId.ToString())
+                .Get();
+            return response.Models.Select(u => new ScheduleDto
+            {
+                ScheduleId = u.ScheduleId,
+                ScheduleSubject = u.ScheduleSubject,
+                ScheduleDay = u.ScheduleDay,
+                ScheduleStartTime = u.ScheduleStartTime,
+                ScheduleEndTime = u.ScheduleEndTime,
+                ScheduleRepeatWeekly = u.ScheduleRepeatWeekly,
+                ScheduleRoomId = u.ScheduleRoomId,
+                ScheduleUserId = u.ScheduleUserId,
+            }).ToList();
+        }
+
     }
 }
