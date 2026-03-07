@@ -13,6 +13,7 @@
         public DateTime ScheduleEndTime { get; set; }
 
         public bool? ScheduleRepeatWeekly { get; set; }
+        public bool? ScheduleRepeatDaily { get; set; }
 
         public int? ScheduleRoomId { get; set; }
 

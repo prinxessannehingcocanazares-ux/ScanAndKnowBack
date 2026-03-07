@@ -98,9 +98,77 @@ namespace ScanToKnowBusiness
         {
             return _userRepository.GetRoomsRepoAsync();
         }
-        public Task<ScheduleDto> CreateScheduleServiceAsync(ScheduleDto schedule)
+        public async Task<List<ScheduleDto>> CreateScheduleServiceAsync(ScheduleDto schedule)
         {
-            return _userRepository.CreateScheduleRepoAsync(schedule);
+            var results = new List<ScheduleDto>();
+
+            if (schedule.ScheduleRepeatDaily == true && schedule.ScheduleDay != null)
+            {
+                DateTime scheduleDay = schedule.ScheduleDay.Value.ToDateTime(TimeOnly.MinValue);
+
+                int diff = scheduleDay.DayOfWeek - DayOfWeek.Sunday;
+                DateTime sunday = scheduleDay.AddDays(-diff);
+
+                for (int i = 0; i < 7; i++)
+                {
+                    DateTime currentDay = sunday.AddDays(i);
+
+                    var newSchedule = new ScheduleDto
+                    {
+                        ScheduleSubject = schedule.ScheduleSubject,
+                        ScheduleDay = DateOnly.FromDateTime(currentDay),
+                        ScheduleStartTime = currentDay.Date + schedule.ScheduleStartTime.TimeOfDay,
+                        ScheduleEndTime = currentDay.Date + schedule.ScheduleEndTime.TimeOfDay,
+                        ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
+                        ScheduleRepeatDaily = schedule.ScheduleRepeatDaily,
+                        ScheduleRoomId = schedule.ScheduleRoomId,
+                        ScheduleUserId = schedule.ScheduleUserId
+                    };
+
+                    var created = await _userRepository.CreateScheduleRepoAsync(newSchedule);
+                    results.Add(created);
+                }
+            }
+            else if (schedule.ScheduleRepeatWeekly == true && schedule.ScheduleDay != null)
+            {
+                DateOnly startDay = schedule.ScheduleDay.Value;
+
+                DateOnly endDay = new DateOnly(startDay.Year, startDay.Month, DateTime.DaysInMonth(startDay.Year, startDay.Month));
+
+                int totalDays = (endDay.ToDateTime(TimeOnly.MinValue) - startDay.ToDateTime(TimeOnly.MinValue)).Days;
+                int weeks = (int)Math.Ceiling(totalDays / 7.0);
+
+                for (int i = 0; i < weeks; i++)
+                {
+                    DateOnly currentDay = startDay.AddDays(i * 7);
+
+                    int weekNumber = i + 1;
+
+                    var newSchedule = new ScheduleDto
+                    {
+                        ScheduleSubject = schedule.ScheduleSubject,
+                        ScheduleDay = currentDay,
+                        ScheduleStartTime = currentDay.ToDateTime(TimeOnly.FromTimeSpan(schedule.ScheduleStartTime.TimeOfDay)),
+                        ScheduleEndTime = currentDay.ToDateTime(TimeOnly.FromTimeSpan(schedule.ScheduleEndTime.TimeOfDay)),
+                        ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
+                        ScheduleRepeatDaily = schedule.ScheduleRepeatDaily,
+                        ScheduleRoomId = schedule.ScheduleRoomId,
+                        ScheduleUserId = schedule.ScheduleUserId
+                    };
+
+                    var created = await _userRepository.CreateScheduleRepoAsync(newSchedule);
+                    results.Add(created);
+
+                    Console.WriteLine($"Scheduled week {weekNumber}: {currentDay}");
+                }
+            }
+            else
+            {
+                var created = await _userRepository.CreateScheduleRepoAsync(schedule);
+                results.Add(created);
+            }
+
+            return results;
         }
         public Task<List<ScheduleDto>> GetSchedulesByUserIdServiceAsync(int userId)
         {
