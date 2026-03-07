@@ -311,8 +311,8 @@ namespace ScanToKnowDataAccess.Repositories
             {
                 ScheduleSubject = schedule.ScheduleSubject,
                 ScheduleDay = schedule.ScheduleDay,
-                ScheduleStartTime = schedule.ScheduleStartTime.AddHours(8),
-                ScheduleEndTime = schedule.ScheduleEndTime.AddHours(8),
+                ScheduleStartTime = schedule.ScheduleStartTime, //add 8 for test purposes, remove later
+                ScheduleEndTime = schedule.ScheduleEndTime,//add 8 for test purposes, remove later
                 ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
                 ScheduleUserId = schedule.ScheduleUserId,
             };
