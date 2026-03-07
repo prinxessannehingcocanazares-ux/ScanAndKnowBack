@@ -25,9 +25,9 @@ namespace ScanToKnowBusiness
             return _userRepository.GetUserByIdRepoAsync(id);
         }
 
-        public  Task<List<DepartmentDto>> GetDepartmentsServiceAsync()
+        public Task<List<DepartmentDto>> GetDepartmentsServiceAsync()
         {
-            return  _userRepository.GetDepartmentsRepoAsync();
+            return _userRepository.GetDepartmentsRepoAsync();
         }
         public Task<List<PositionDto>> GetPositionsServiceAsync()
         {
@@ -39,7 +39,7 @@ namespace ScanToKnowBusiness
             var position = await _userRepository.GetPositionByIdRepoAsync(userReq.Position);
             userReq.CreatedAt = DateTime.UtcNow;
 
-            var createResponse = await _userRepository.CreateUserRepoAsync(userReq, department,position);
+            var createResponse = await _userRepository.CreateUserRepoAsync(userReq, department, position);
 
             bool xUserStatus = false;
             var xUserCreated = new XUserDto();
@@ -214,9 +214,9 @@ namespace ScanToKnowBusiness
             return availableRooms;
         }
 
-        public async Task<ScheduleUpdateResponse> UpdateScheduleServiceAsync(ScheduleUpdateRequest updateRequest)
+        public async Task<ScheduleUpdateResponse> UpdateScheduleRoomServiceAsync(ScheduleUpdateRequest updateRequest)
         {
-            return await _userRepository.UpdateScheduleRepoAsync(updateRequest);
+            return await _userRepository.UpdateScheduleRoomRepoAsync(updateRequest);
         }
 
         public async Task<RoomDto> GetRoomByIdServiceAsync(int id)
@@ -229,5 +229,11 @@ namespace ScanToKnowBusiness
             return await _userRepository.GetDepartmentByIdRepoAsync(id);
         }
 
+        public async Task<UpdateStartOrEndResponse> UpdateScheduleStartOrEndServiceAsync(UpdateStartOrEndRequest updateRequest)
+        {
+
+            return await _userRepository.UpdateScheduleStartOrEndRepoAsync(updateRequest);
+            
+        }
     }
 }

@@ -19,5 +19,7 @@
 
         public int? ScheduleUserId { get; set; }
         public bool? ScheduleStatus { get; set; }
+        public DateTime? ScheduleStart { get; set; }
+        public DateTime? ScheduleEnd {  get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ScanToKnowDataAccess.Dto;
 using ScanToKnowDataAccess.Models;
+using System.ComponentModel;
 using static Supabase.Postgrest.Constants;
 
 namespace ScanToKnowDataAccess.Repositories
@@ -311,8 +312,8 @@ namespace ScanToKnowDataAccess.Repositories
             {
                 ScheduleSubject = schedule.ScheduleSubject,
                 ScheduleDay = schedule.ScheduleDay,
-                ScheduleStartTime = schedule.ScheduleStartTime, //add 8 for test purposes, remove later
-                ScheduleEndTime = schedule.ScheduleEndTime,//add 8 for test purposes, remove later
+                ScheduleStartTime = schedule.ScheduleStartTime,  // local testing include .AddHours(8) - remove on deploy
+                ScheduleEndTime = schedule.ScheduleEndTime, // local testing include .AddHours(8) - remove on deploy
                 ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
                 ScheduleUserId = schedule.ScheduleUserId,
             };
@@ -366,6 +367,8 @@ namespace ScanToKnowDataAccess.Repositories
                 ScheduleRepeatWeekly = u.ScheduleRepeatWeekly,
                 ScheduleRoomId = u.ScheduleRoomId,
                 ScheduleUserId = u.ScheduleUserId,
+                ScheduleStart = u.ScheduleStart,
+                ScheduleEnd = u.ScheduleEnd,
             }).ToList();
         }
 
@@ -389,7 +392,7 @@ namespace ScanToKnowDataAccess.Repositories
             }).ToList();
         }
 
-        public async Task<ScheduleUpdateResponse> UpdateScheduleRepoAsync(ScheduleUpdateRequest updateRequest)
+        public async Task<ScheduleUpdateResponse> UpdateScheduleRoomRepoAsync(ScheduleUpdateRequest updateRequest)
         {
             var response = await _supabase
                 .From<ScheduleModel>()
@@ -453,5 +456,94 @@ namespace ScanToKnowDataAccess.Repositories
             return response;
         }
 
+        public async Task<UpdateStartOrEndResponse> UpdateScheduleStartOrEndRepoAsync(UpdateStartOrEndRequest updateRequest)
+        {
+            var message = "";
+            var time = DateTime.Now; // Current time
+            var formattedTime = time.ToString("yyyy-MM-dd HH:mm:ss"); // Format to save
+
+            // Get the schedule first
+            var scheduleResponse = await _supabase
+                .From<ScheduleModel>()
+                .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId)
+                .Get();
+
+            var schedule = scheduleResponse.Models.FirstOrDefault();
+
+            if (schedule == null)
+            {
+                return new UpdateStartOrEndResponse
+                {
+                    Message = "Schedule not found."
+                };
+            }
+
+            Supabase.Postgrest.Responses.ModeledResponse<ScheduleModel> response;
+
+            if (updateRequest.Start)
+            {
+                if (schedule.ScheduleStart != null)
+                {
+                    return new UpdateStartOrEndResponse
+                    {
+                        Message = "Start already recorded."
+                    };
+                }
+
+                response = await _supabase
+     .From<ScheduleModel>()
+     .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId)
+     .Set(x => x.ScheduleStart, time)   // local testing include .AddHours(8) - remove on deploy
+     .Update();
+            }
+            else if (updateRequest.End)
+            {
+                if (schedule.ScheduleStart == null)
+                {
+                    return new UpdateStartOrEndResponse
+                    {
+                        Message = "Cannot end schedule before start."
+                    };
+                }
+
+                if (schedule.ScheduleEnd != null)
+                {
+                    return new UpdateStartOrEndResponse
+                    {
+                        Message = "End already recorded."
+                    };
+                }
+
+                // Directly compare DateTime values
+                if (time <= schedule.ScheduleStart)
+                {
+                    return new UpdateStartOrEndResponse
+                    {
+                        Message = "End time must be after start time."
+                    };
+                }
+
+                response = await _supabase
+                    .From<ScheduleModel>()
+                    .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId)
+                    .Set(x => x.ScheduleEnd, time)  // local testing include .AddHours(8) - remove on deploy
+                    .Update();
+            }
+            else
+            {
+                return new UpdateStartOrEndResponse
+                {
+                    Message = "Invalid request."
+                };
+            }
+
+            var updated = response.Models.FirstOrDefault();
+            message = updated != null ? "ok" : "Update failed";
+
+            return new UpdateStartOrEndResponse
+            {
+                Message = message
+            };
+        }
     }
 }

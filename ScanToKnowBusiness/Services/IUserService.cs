@@ -16,10 +16,10 @@ namespace ScanToKnowBusiness
         Task<List<ScheduleDto>> CreateScheduleServiceAsync(ScheduleDto schedule);
         Task<List<ScheduleDto>> GetSchedulesByUserIdServiceAsync(int userId);
         Task<List<AvailableRoomResponseDto>> GetAvailableRoomsServiceAsync(AvailableRoomDto availableRoomRequest);
-        Task<ScheduleUpdateResponse> UpdateScheduleServiceAsync(ScheduleUpdateRequest updateRequest);
+        Task<ScheduleUpdateResponse> UpdateScheduleRoomServiceAsync(ScheduleUpdateRequest updateRequest);
         Task<RoomDto> GetRoomByIdServiceAsync(int id);
         Task<DepartmentDto> GetDepartmentByIdServiceAsync(int id);
-
+        Task<UpdateStartOrEndResponse> UpdateScheduleStartOrEndServiceAsync(UpdateStartOrEndRequest updateRequest);
 
     }
 }

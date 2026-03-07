@@ -20,9 +20,10 @@ namespace ScanToKnowDataAccess.Repositories
         Task<ScheduleDto> CreateScheduleRepoAsync(ScheduleDto schedule);
         Task<List<ScheduleDto>> GetSchedulesByUserIdRepoAsync(int userId);
         Task<List<ScheduleDto>> GetAllSchedulesRepoAsync();
-        Task<ScheduleUpdateResponse> UpdateScheduleRepoAsync(ScheduleUpdateRequest updateRequest);
+        Task<ScheduleUpdateResponse> UpdateScheduleRoomRepoAsync(ScheduleUpdateRequest updateRequest);
         Task<RoomDto> GetRoomByIdRepoAsync(int id);
         Task<DepartmentDto> GetDepartmentByIdRepoAsync(int id);
+        Task<UpdateStartOrEndResponse> UpdateScheduleStartOrEndRepoAsync(UpdateStartOrEndRequest updateRequest);
 
 
     }

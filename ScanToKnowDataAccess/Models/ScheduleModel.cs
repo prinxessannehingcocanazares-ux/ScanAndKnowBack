@@ -29,5 +29,10 @@ namespace ScanToKnowDataAccess.Models
 
         [Column("schedule_user_id")]
         public int? ScheduleUserId { get; set; }
+
+        [Column("schedule_start")]
+        public DateTime? ScheduleStart { get; set; }
+        [Column("schedule_end")]
+        public DateTime? ScheduleEnd { get; set; }
     }
 }

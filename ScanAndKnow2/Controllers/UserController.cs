@@ -200,12 +200,33 @@ public class UserController : ControllerBase
     {
         try
         {
-            var updateScheduleResponse = await _userService.UpdateScheduleServiceAsync(scheduleRequest);
+            var updateScheduleResponse = await _userService.UpdateScheduleRoomServiceAsync(scheduleRequest);
             return Ok(updateScheduleResponse);
         }
         catch (Exception ex)
         {
             return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("UpdateStartOrEnd")]
+    public async Task<IActionResult> UpdateStartOrEnd([FromBody] UpdateStartOrEndRequest request)
+    {
+        try {
+            if (!request.Start && !request.End)
+                return BadRequest("Invalid action.");
+
+            var updateResponse = await _userService.UpdateScheduleStartOrEndServiceAsync(request);
+
+
+            return Ok(new
+            {
+                message = updateResponse.Message,
+            });
+        }catch(Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+
         }
     }
 
