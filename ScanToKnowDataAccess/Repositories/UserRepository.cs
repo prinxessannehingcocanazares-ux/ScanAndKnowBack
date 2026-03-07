@@ -519,7 +519,7 @@ namespace ScanToKnowDataAccess.Repositories
                 {
                     return new UpdateStartOrEndResponse
                     {
-                        Message = "End time must be after start time."
+                        Message = $"End time {time} must be after start time. {schedule.ScheduleStartTime}"
                     };
                 }
 
