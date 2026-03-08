@@ -104,6 +104,65 @@ namespace ScanToKnowDataAccess.Repositories
             };
 
         }
+        public async Task<UserDto> UpdateUserRepoAsync(UpdateUserDto updateReq)
+        {
+            if (updateReq.Id <= 0)
+                return null; // invalid ID
+
+            // Fetch existing user first
+            var existing = await _supabase
+                .From<UserModel>()
+                .Filter("user_id", Operator.Equals, updateReq.Id.ToString())
+                .Single();
+
+            if (existing == null)
+                return null; // user not found
+
+            // Only update fields that are not null/empty
+            if (!string.IsNullOrWhiteSpace(updateReq.FirstName))
+                existing.UserFirstName = updateReq.FirstName;
+
+            if (!string.IsNullOrWhiteSpace(updateReq.LastName))
+                existing.UserLastName = updateReq.LastName;
+
+            if (!string.IsNullOrWhiteSpace(updateReq.Email))
+                existing.UserEmail = updateReq.Email;
+
+            if (!string.IsNullOrWhiteSpace(updateReq.ContactNumber))
+                existing.UserContactNumber = updateReq.ContactNumber;
+
+            if (!string.IsNullOrWhiteSpace(updateReq.Department))
+                existing.UserDepartment = updateReq.Department;
+
+            if (!string.IsNullOrWhiteSpace(updateReq.Position))
+                existing.UserPosition = updateReq.Position;
+
+            if (updateReq.ProfilePicture != null)
+                existing.UserProfilePicture = updateReq.ProfilePicture;
+
+            // Perform the update
+            var response = await _supabase
+                .From<UserModel>()
+                .Filter("user_id", Operator.Equals, updateReq.Id.ToString())
+                .Update(existing);
+
+            var updated = response.Models.FirstOrDefault();
+            if (updated == null)
+                return null;
+
+            return new UserDto
+            {
+                Id = updated.UserId,
+                FirstName = updated.UserFirstName,
+                LastName = updated.UserLastName,
+                Email = updated.UserEmail,
+                ContactNumber = updated.UserContactNumber,
+                Department = updated.UserDepartment,
+                Position = updated.UserPosition,
+                ProfilePicture = updated.UserProfilePicture,
+                Status = true
+            };
+        }
 
         public async Task<UserDto?> LoginUserRepoAsync(UserDto user)
         {
@@ -233,52 +292,6 @@ namespace ScanToKnowDataAccess.Repositories
                 return null;
 
             return response.PositionTitle;
-        }
-        public async Task<UserDto?> UpdateAsync(UserDto userDto)
-        {
-            if (userDto.Id <= 0)
-                return null; // invalid ID
-
-            var updateModel = new UserModel
-            {
-                UserId = userDto.Id,
-                UserFirstName = userDto.FirstName,
-                UserLastName = userDto.LastName,
-                UserEmail = userDto.Email,
-                UserContactNumber = userDto.ContactNumber,
-                UserDepartment = userDto.Department,
-                UserPosition = userDto.Position,
-                UserProfilePicture = userDto.ProfilePicture,
-
-            };
-
-            // Use Filter BEFORE awaiting
-            var response = await _supabase
-                .From<UserModel>()
-                .Filter("id", Operator.Equals, userDto.Id)  // <-- this is the filter
-                .Update(updateModel);
-
-            var updated = response.Models.FirstOrDefault();
-            bool status = false;
-
-            if (updated == null)
-            {
-                status = true;
-                return null;
-            }
-
-            return new UserDto
-            {
-                Id = updated.UserId,
-                FirstName = updated.UserFirstName,
-                LastName = updated.UserLastName,
-                Email = updated.UserEmail,
-                ContactNumber = updated.UserContactNumber,
-                Department = updated.UserDepartment,
-                Position = updated.UserPosition,
-                ProfilePicture = updated.UserProfilePicture,
-                Status = status
-            };
         }
         public async Task<bool> DeleteAsync(int id)
         {

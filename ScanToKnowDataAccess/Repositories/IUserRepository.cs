@@ -7,10 +7,11 @@ namespace ScanToKnowDataAccess.Repositories
         Task<List<UserDto>> GetAllAsync();
         Task<UserDto> GetUserByIdRepoAsync(int id);
         Task<UserDto> CreateUserRepoAsync(UserDto userDto, string department, string position);
+        Task<UserDto> UpdateUserRepoAsync(UpdateUserDto userDto);
+
         Task<UserDto> LoginUserRepoAsync(UserDto user);
 
         Task<XUserDto> CreateXUserAsync(XUserDto xUserDto);
-        Task<UserDto?> UpdateAsync(UserDto user);
         Task<bool> DeleteAsync(int id);
         Task<List<DepartmentDto>> GetDepartmentsRepoAsync();
         Task<string> GetDepartmentByIdRepoAsync(string id);

@@ -69,6 +69,41 @@ public class UserController : ControllerBase
         }
     }
 
+    [HttpPost("UpdateUser")]
+    public async Task<IActionResult> UpdateUser([FromForm] UpdateUserRequest request)
+    {
+        try
+        {
+            string profileUrl = null;
+
+            if (request.ProfilePicture != null && request.ProfilePicture.Length > 0)
+            {
+                profileUrl = await _supabaseService.UploadProfilePictureAsync(request.ProfilePicture);
+            }
+
+
+            // Map form data to UserDto
+            var user = new UpdateUserDto
+            {
+                Id = request.Id,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                ContactNumber = request.ContactNumber,
+                Department = request.Department,
+                Position = request.Position,
+                Email = request.Email,
+                ProfilePicture = profileUrl,
+            };
+            var response = await _userService.UpdateUserServiceAsync(user);
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+
+    }
+
     [HttpPost("GetUserById")]
     public async Task<ActionResult<UserModel>> GetUserById(int id)
     {
@@ -138,13 +173,7 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("UpdateUser")]
-    public async Task<ActionResult<UserDto>> UpdateUser(UserDto user)
-    {
-        var response = await _userService.UpdateAsync(user);
-        return Ok(response);
 
-    }
 
     [HttpPost("DeleteUser")]
     public async Task<ActionResult> DeleteUser(int id)

@@ -76,17 +76,20 @@ namespace ScanToKnowBusiness
                 return null;
             }
         }
+        public async Task<UserDto> UpdateUserServiceAsync(UpdateUserDto userReq)
+        {
+
+          
+            var updateResponse = await _userRepository.UpdateUserRepoAsync(userReq);
+            return updateResponse;
+        }
 
         public Task<UserDto> LoginUserServiceAsync(UserDto user)
         {
             return _userRepository.LoginUserRepoAsync(user);
         }
 
-        public Task<UserDto?> UpdateAsync(UserDto user)
-        {
-            return _userRepository.UpdateAsync(user);
-        }
-
+   
 
         public Task<bool> DeleteAsync(int id)
         {
