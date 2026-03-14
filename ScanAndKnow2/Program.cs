@@ -40,6 +40,7 @@ builder.Services.AddSingleton(supabaseClient);
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ISupabaseService, SupabaseService>();
+builder.Services.AddHostedService<ScheduleCheckerService>();
 
 // ----------------------------
 // Add Controllers & Swagger

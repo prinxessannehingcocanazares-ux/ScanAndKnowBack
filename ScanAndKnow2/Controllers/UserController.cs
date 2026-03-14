@@ -182,6 +182,14 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
+    
+    [HttpPost("DeleteScheduleById")]
+    public async Task<ActionResult> DeleteScheduleById(int id)
+    {
+        var response = await _userService.DeleteScheduleByIdServiceAync(id);
+        return Ok(response);
+    }
+
     [HttpPost("CreateSchedule")]
     public async Task<ActionResult<ScheduleDto>> CreateSchedule(ScheduleDto schedule)
     {
@@ -202,6 +210,20 @@ public class UserController : ControllerBase
         try
         {
             var schedules = await _userService.GetSchedulesByUserIdServiceAsync(id);
+            return Ok(schedules);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { status = false, message = ex.Message });
+        }
+    }
+
+    [HttpPost("GetAllSchedules")]
+    public async Task<ActionResult<List<ScheduleDto>>> GetAllSchedules()
+    {
+        try
+        {
+            var schedules = await _userService.GetAllSchedulesServiceAsync();
             return Ok(schedules);
         }
         catch (Exception ex)

@@ -13,6 +13,8 @@ namespace ScanToKnowDataAccess.Repositories
 
         Task<XUserDto> CreateXUserAsync(XUserDto xUserDto);
         Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteScheduleByIdRepoAync(int id);
+
         Task<List<DepartmentDto>> GetDepartmentsRepoAsync();
         Task<string> GetDepartmentByIdRepoAsync(string id);
         Task<List<PositionDto>> GetPositionsServiceAsync();
@@ -20,11 +22,13 @@ namespace ScanToKnowDataAccess.Repositories
         Task<List<RoomDto>> GetRoomsRepoAsync();
         Task<ScheduleDto> CreateScheduleRepoAsync(ScheduleDto schedule);
         Task<List<ScheduleDto>> GetSchedulesByUserIdRepoAsync(int userId);
+
         Task<List<ScheduleDto>> GetAllSchedulesRepoAsync();
         Task<ScheduleUpdateResponse> UpdateScheduleRoomRepoAsync(ScheduleUpdateRequest updateRequest);
         Task<RoomDto> GetRoomByIdRepoAsync(int id);
         Task<DepartmentDto> GetDepartmentByIdRepoAsync(int id);
         Task<UpdateStartOrEndResponse> UpdateScheduleStartOrEndRepoAsync(UpdateStartOrEndRequest updateRequest);
+        Task<UpdateStartOrEndResponse> UpdateScheduleEndOnlyAsync(UpdateStartOrEndRequest scheduleCheckerRequest);
 
 
     }

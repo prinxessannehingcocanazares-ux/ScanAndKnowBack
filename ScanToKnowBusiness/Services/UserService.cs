@@ -97,6 +97,11 @@ namespace ScanToKnowBusiness
             return _userRepository.DeleteAsync(id);
         }
 
+        public Task<bool> DeleteScheduleByIdServiceAync(int id)
+        {
+
+            return _userRepository.DeleteScheduleByIdRepoAync(id);
+        }
         public Task<List<RoomDto>> GetRoomsServiceAsync()
         {
             return _userRepository.GetRoomsRepoAsync();
@@ -176,6 +181,10 @@ namespace ScanToKnowBusiness
         public Task<List<ScheduleDto>> GetSchedulesByUserIdServiceAsync(int userId)
         {
             return _userRepository.GetSchedulesByUserIdRepoAsync(userId);
+        }
+        public Task<List<ScheduleDto>> GetAllSchedulesServiceAsync()
+        {
+            return _userRepository.GetAllSchedulesRepoAsync();
         }
 
         public async Task<List<AvailableRoomResponseDto>> GetAvailableRoomsServiceAsync(AvailableRoomDto availableRoomRequest)

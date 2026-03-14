@@ -10,5 +10,9 @@ namespace ScanToKnowDataAccess.Dto
     {
         public int? ScheduleId { get; set; }
         public int? RoomId { get; set; }
+        public DateTime? ScheduleEndTime { get; set; }
+        public DateTime? ScheduleStartTime { get; set; }
+        public string? ScheduleSubject { get; set; }
+        public string? UpdateTag { get; set; }
     }
 }

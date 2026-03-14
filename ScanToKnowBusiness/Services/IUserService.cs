@@ -11,11 +11,14 @@ namespace ScanToKnowBusiness
 
         Task<UserDto> LoginUserServiceAsync(UserDto user);
         Task<bool> DeleteAsync(int id);
+        Task<bool> DeleteScheduleByIdServiceAync(int id);
         Task<List<DepartmentDto>> GetDepartmentsServiceAsync();
         Task<List<PositionDto>> GetPositionsServiceAsync();
         Task<List<RoomDto>> GetRoomsServiceAsync();
         Task<List<ScheduleDto>> CreateScheduleServiceAsync(ScheduleDto schedule);
         Task<List<ScheduleDto>> GetSchedulesByUserIdServiceAsync(int userId);
+        Task<List<ScheduleDto>> GetAllSchedulesServiceAsync();
+
         Task<List<AvailableRoomResponseDto>> GetAvailableRoomsServiceAsync(AvailableRoomDto availableRoomRequest);
         Task<ScheduleUpdateResponse> UpdateScheduleRoomServiceAsync(ScheduleUpdateRequest updateRequest);
         Task<RoomDto> GetRoomByIdServiceAsync(int id);

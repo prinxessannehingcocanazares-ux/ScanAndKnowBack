@@ -303,6 +303,16 @@ namespace ScanToKnowDataAccess.Repositories
             return true;
         }
 
+        public async Task<bool> DeleteScheduleByIdRepoAync(int id)
+        {
+            await _supabase
+                .From<ScheduleModel>()
+                .Where(x => x.ScheduleId == id)
+                .Delete();
+
+            return true;
+        }
+
         public async Task<List<RoomDto>> GetRoomsRepoAsync()
         {
             var response = await _supabase
@@ -325,8 +335,8 @@ namespace ScanToKnowDataAccess.Repositories
             {
                 ScheduleSubject = schedule.ScheduleSubject,
                 ScheduleDay = schedule.ScheduleDay,
-                ScheduleStartTime = schedule.ScheduleStartTime,  // local testing include .AddHours(8) - remove on deploy
-                ScheduleEndTime = schedule.ScheduleEndTime, // local testing include .AddHours(8) - remove on deploy
+                ScheduleStartTime = schedule.ScheduleStartTime.AddHours(8),  // local testing include .AddHours(8) - remove on deploy
+                ScheduleEndTime = schedule.ScheduleEndTime.AddHours(8), // local testing include .AddHours(8) - remove on deploy
                 ScheduleRepeatWeekly = schedule.ScheduleRepeatWeekly,
                 ScheduleUserId = schedule.ScheduleUserId,
             };
@@ -402,16 +412,31 @@ namespace ScanToKnowDataAccess.Repositories
                 ScheduleRepeatWeekly = u.ScheduleRepeatWeekly,
                 ScheduleRoomId = u.ScheduleRoomId,
                 ScheduleUserId = u.ScheduleUserId,
+                ScheduleStart = u.ScheduleStart,
+                ScheduleEnd = u.ScheduleEnd
             }).ToList();
         }
 
         public async Task<ScheduleUpdateResponse> UpdateScheduleRoomRepoAsync(ScheduleUpdateRequest updateRequest)
         {
+
             var response = await _supabase
                 .From<ScheduleModel>()
                 .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId.ToString())
+                .Set(x => x.ScheduleStartTime, updateRequest.ScheduleStartTime.Value.AddHours(8)) //local testing addhours(8) remove on deploy
+                .Set(x => x.ScheduleEndTime, updateRequest.ScheduleEndTime.Value.AddHours(8)) //local testing addhours(8) remove on deploy
+                .Set(x => x.ScheduleSubject, updateRequest.ScheduleSubject)
                 .Set(x => x.ScheduleRoomId, updateRequest.RoomId)
                 .Update();
+
+            if(updateRequest.UpdateTag == "editDashFlag")
+            {
+                var editDashRes = await _supabase
+                .From<ScheduleModel>()
+                .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId.ToString())
+                .Set(x => x.ScheduleEnd, null)
+                .Update();
+            }
 
             var updated = response.Models.FirstOrDefault();
 
@@ -472,7 +497,7 @@ namespace ScanToKnowDataAccess.Repositories
         public async Task<UpdateStartOrEndResponse> UpdateScheduleStartOrEndRepoAsync(UpdateStartOrEndRequest updateRequest)
         {
             var message = "";
-            var time = DateTime.Now; // Current time
+            var time = DateTime.Now.AddHours(8); // Current time  // local testing include .AddHours(8) - remove on deploy
             var formattedTime = time.ToString("yyyy-MM-dd HH:mm:ss"); // Format to save
 
             // Get the schedule first
@@ -506,7 +531,7 @@ namespace ScanToKnowDataAccess.Repositories
                 response = await _supabase
      .From<ScheduleModel>()
      .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId)
-     .Set(x => x.ScheduleStart, time)   // local testing include .AddHours(8) - remove on deploy
+     .Set(x => x.ScheduleStart, time)  
      .Update();
             }
             else if (updateRequest.End)
@@ -539,7 +564,7 @@ namespace ScanToKnowDataAccess.Repositories
                 response = await _supabase
                     .From<ScheduleModel>()
                     .Filter("schedule_id", Operator.Equals, updateRequest.ScheduleId)
-                    .Set(x => x.ScheduleEnd, time)  // local testing include .AddHours(8) - remove on deploy
+                    .Set(x => x.ScheduleEnd, time)
                     .Update();
             }
             else
@@ -549,6 +574,35 @@ namespace ScanToKnowDataAccess.Repositories
                     Message = "Invalid request."
                 };
             }
+
+            var updated = response.Models.FirstOrDefault();
+            message = updated != null ? "ok" : "Update failed";
+
+            return new UpdateStartOrEndResponse
+            {
+                Message = message
+            };
+        }
+        public async Task<UpdateStartOrEndResponse> UpdateScheduleEndOnlyAsync(UpdateStartOrEndRequest scheduleCheckerRequest)
+        {
+            var message = "";
+            var now = DateTime.Now;
+
+            // Get the schedule first
+            var scheduleResponse = await _supabase
+                .From<ScheduleModel>()
+                .Filter("schedule_id", Operator.Equals, scheduleCheckerRequest.ScheduleId)
+                .Get();
+
+            var schedule = scheduleResponse.Models.FirstOrDefault();
+
+
+            // Update only ScheduleEnd
+            var response = await _supabase
+                .From<ScheduleModel>()
+                .Filter("schedule_id", Operator.Equals, scheduleCheckerRequest.ScheduleId)
+                .Set(x => x.ScheduleEnd, now)
+                .Update();
 
             var updated = response.Models.FirstOrDefault();
             message = updated != null ? "ok" : "Update failed";
